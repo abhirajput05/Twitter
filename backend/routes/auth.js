@@ -1,9 +1,11 @@
 import express from "express";
-import { login, logout, signup } from "../controllers/auth.js";
+import { getMe, login, logout, signup } from "../controllers/auth.js";
+import {body} from "express-validator";
+import { protectRoute } from "../middleware/protectRoute.js";
 
 const router=express.Router();
-
-router.post("/signup",signup);
+router.get("/me",protectRoute,  getMe);
+router.post("/signup", [body('email').isEmail().withMessage('Invalid email address'),],signup);
 router.post("/login",login);
 router.post("/logout",logout);
 export default router;
